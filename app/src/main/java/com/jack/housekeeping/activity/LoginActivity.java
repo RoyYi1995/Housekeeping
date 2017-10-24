@@ -1,5 +1,6 @@
 package com.jack.housekeeping.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,9 +9,9 @@ import android.widget.RadioButton;
 
 import com.jack.housekeeping.R;
 import com.jack.housekeeping.presenter.HttpRequestServer;
+import com.jack.housekeeping.utils.ResponseUtil;
 import com.socks.library.KLog;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,8 +46,19 @@ public class LoginActivity extends AppCompatActivity {
                 doLogin();
                 break;
             case R.id.signUp_btn:
+                doSignUp();
                 break;
         }
+    }
+
+    private void doSignUp() {
+        Intent intent = new Intent(this, SignUpAcitity.class);
+        if (customerRb.isChecked()) {
+            intent.putExtra("userType", "custom");
+        } else {
+            intent.putExtra("userType", "employee");
+        }
+        startActivity(intent);
     }
 
     private void doLogin() {
@@ -67,10 +79,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseBody responseBody) {
-                try {
-                    KLog.i(responseBody.string());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (ResponseUtil.verify(responseBody)) {
+
                 }
             }
         });
