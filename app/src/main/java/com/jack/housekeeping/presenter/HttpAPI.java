@@ -92,6 +92,9 @@ public interface HttpAPI {
     @POST("{path}")
     Observable<ResponseBody> doPostNoParams(@Path(value = "path", encoded = true) String path);
 
+    @GET("{path}")
+    Observable<ResponseBody> doGetNoParams(@Path(value = "path", encoded = true) String path);
+
     @Multipart
     @POST("{path}")
     Observable<ResponseBody> upLoadImage(@Path(value = "path", encoded = true) String path, @Part RequestBody body, @Part MultipartBody.Part file);

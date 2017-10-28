@@ -156,7 +156,20 @@ public class HttpRequestServer {
                 .subscribe(callBack);
     }
 
-    public void doGet(String path, Map<String,String> params, Subscriber<ResponseBody> callBack){
+    /**
+     * 不需要传参的get
+     * @param path
+     * @param callBack
+     */
+    public void doGet(String path, Subscriber<ResponseBody> callBack){
+        mHttpAPI.doGetNoParams(path)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callBack);
+    }
+
+    public void doGetWithParams(String path, Map<String,String> params, Subscriber<ResponseBody> callBack){
         mHttpAPI.getRequest(path,params)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

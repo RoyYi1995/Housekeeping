@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
      * 注册
      */
     private void doSignUp() {
-        Intent intent = new Intent(this, SignUpAcitity.class);
+        Intent intent = new Intent(this, CustomSignUpActivity.class);
         if (customerRb.isChecked()) {
             intent.putExtra("userType", "custom");
         } else {
@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         Map<String, String> map = new HashMap<>();
         map.put("username", userName);
         map.put("password", password);
-        HttpRequestServer.create(this).doGet(LOGIN_URL, map, new Subscriber<ResponseBody>() {
+        HttpRequestServer.create(this).doGetWithParams(LOGIN_URL, map, new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
             }

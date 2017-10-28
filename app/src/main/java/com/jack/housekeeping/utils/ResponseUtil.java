@@ -1,5 +1,7 @@
 package com.jack.housekeeping.utils;
 
+import android.util.Log;
+
 import com.socks.library.KLog;
 
 import org.json.JSONObject;
@@ -36,12 +38,15 @@ public class ResponseUtil {
             KLog.i(responseStr);
             JSONObject jsonObject = new JSONObject(responseStr);
             int code = jsonObject.getInt("status");
-            if (code!=200)
+            if (code!=200){
                 isTure = false;
-            if (haveMsg){
-                message = jsonObject.getString("data");
-                KLog.i(message);
+            }else {
+                if (haveMsg){
+                    message = jsonObject.getString("data");
+                    KLog.i(message);
+                }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             KLog.i("网络错误");
