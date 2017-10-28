@@ -8,8 +8,10 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 
 import com.jack.housekeeping.R;
+import com.jack.housekeeping.bean.Custom;
 import com.jack.housekeeping.presenter.HttpRequestServer;
 import com.jack.housekeeping.utils.ResponseUtil;
+import com.jack.housekeeping.utils.UserUtil;
 import com.socks.library.KLog;
 
 import java.util.HashMap;
@@ -51,6 +53,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 注册
+     */
     private void doSignUp() {
         Intent intent = new Intent(this, SignUpAcitity.class);
         if (customerRb.isChecked()) {
@@ -61,6 +66,9 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * 登录
+     */
     private void doLogin() {
         String userName = phoneEt.getText().toString();
         String password = passwordEt.getText().toString();
@@ -79,8 +87,10 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseBody responseBody) {
-                if (ResponseUtil.verify(responseBody)) {
-
+                if (ResponseUtil.verify(responseBody,true)) {
+                    Custom user = (Custom) ResponseUtil.getByType(Custom.class);
+                    UserUtil.setUser(user);
+                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
                 }
             }
         });

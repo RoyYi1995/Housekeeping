@@ -12,25 +12,25 @@ import android.widget.Toast;
 
 public class ToastUtil {
 
-    private  Context context;
+    public Context context;
 
     private static ToastUtil toastUtil;
 
     private ToastUtil() {
     }
 
-    public static ToastUtil getInstance(){
-        if (toastUtil == null){
+    public static ToastUtil getInstance() {
+        if (toastUtil == null) {
             toastUtil = new ToastUtil();
         }
         return toastUtil;
     }
 
-    public void init(Context context){
+    public void init(Context context) {
         this.context = context;
     }
 
-    public void log(String message){
-        Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
+    public void log(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }
