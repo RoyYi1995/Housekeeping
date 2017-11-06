@@ -2,6 +2,8 @@ package com.jack.housekeeping.bean;
 
 import com.google.gson.Gson;
 
+import java.io.Serializable;
+
 /**
  * Created by Roy
  * Class Describe :
@@ -9,7 +11,7 @@ import com.google.gson.Gson;
  * on 2017/10/28.
  */
 
-public class Task {
+public class Task implements Serializable {
     /**
      * task_id : 4
      * task_name : null
@@ -26,15 +28,15 @@ public class Task {
      */
 
     private int task_id;
-    private Object task_name;
-    private Object task_customer;
-    private Object task_info;
+    private String task_name;
+    private String task_customer;
+    private String task_info;
     private String task_time;
-    private Object task_money;
-    private Object task_area;
-    private Object task_phone;
+    private String task_money;
+    private String task_area;
+    private String task_phone;
     private int task_state;
-    private Object task_people;
+    private String task_people;
     private int task_state_id;
     private String task_state_name;
 
@@ -51,27 +53,27 @@ public class Task {
         this.task_id = task_id;
     }
 
-    public Object getTask_name() {
+    public String getTask_name() {
         return task_name;
     }
 
-    public void setTask_name(Object task_name) {
+    public void setTask_name(String task_name) {
         this.task_name = task_name;
     }
 
-    public Object getTask_customer() {
+    public String getTask_customer() {
         return task_customer;
     }
 
-    public void setTask_customer(Object task_customer) {
+    public void setTask_customer(String task_customer) {
         this.task_customer = task_customer;
     }
 
-    public Object getTask_info() {
+    public String getTask_info() {
         return task_info;
     }
 
-    public void setTask_info(Object task_info) {
+    public void setTask_info(String task_info) {
         this.task_info = task_info;
     }
 
@@ -83,27 +85,27 @@ public class Task {
         this.task_time = task_time;
     }
 
-    public Object getTask_money() {
+    public String getTask_money() {
         return task_money;
     }
 
-    public void setTask_money(Object task_money) {
+    public void setTask_money(String task_money) {
         this.task_money = task_money;
     }
 
-    public Object getTask_area() {
+    public String getTask_area() {
         return task_area;
     }
 
-    public void setTask_area(Object task_area) {
+    public void setTask_area(String task_area) {
         this.task_area = task_area;
     }
 
-    public Object getTask_phone() {
+    public String getTask_phone() {
         return task_phone;
     }
 
-    public void setTask_phone(Object task_phone) {
+    public void setTask_phone(String task_phone) {
         this.task_phone = task_phone;
     }
 
@@ -115,11 +117,11 @@ public class Task {
         this.task_state = task_state;
     }
 
-    public Object getTask_people() {
+    public String getTask_people() {
         return task_people;
     }
 
-    public void setTask_people(Object task_people) {
+    public void setTask_people(String task_people) {
         this.task_people = task_people;
     }
 

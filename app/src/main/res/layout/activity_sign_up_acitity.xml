@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jack.housekeeping.activity.SignUpAcitity">
+    tools:context="com.jack.housekeeping.activity.CustomSignUpActivity">
 
     <TextView
         android:id="@+id/textView3"
@@ -14,65 +13,82 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="44dp"
-        android:textSize="30sp"
-        android:text="注册" />
+        android:text="注册"
+        android:textSize="30sp" />
 
     <EditText
         android:id="@+id/name_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="55dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="用户名"
-        android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true" />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/password_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/name_et"
+        android:layout_alignStart="@+id/name_et"
+        android:layout_below="@+id/name_et"
         android:layout_marginTop="26dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="密码"
-        android:layout_below="@+id/name_et"
-        android:layout_alignLeft="@+id/name_et"
-        android:layout_alignStart="@+id/name_et" />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/phone_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/password_et"
+        android:layout_alignStart="@+id/password_et"
+        android:layout_below="@+id/password_et"
         android:layout_marginTop="29dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:hint="手机号"
-        android:layout_below="@+id/password_et"
-        android:layout_alignLeft="@+id/password_et"
-        android:layout_alignStart="@+id/password_et" />
-
-    <EditText
-        android:id="@+id/area_et"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/phone_et"
-        android:layout_alignStart="@+id/phone_et"
-        android:layout_below="@+id/phone_et"
-        android:layout_marginTop="26dp"
-        android:ems="10"
-        android:hint="区域"
         android:inputType="textPersonName" />
 
-    <Button
-        android:id="@+id/button"
+    <RelativeLayout
+        android:id="@+id/area_rl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/area_et"
-        android:layout_alignLeft="@+id/area_et"
-        android:layout_alignRight="@+id/area_et"
-        android:layout_alignStart="@+id/area_et"
-        android:layout_below="@+id/area_et"
+        android:layout_alignEnd="@+id/phone_et"
+        android:layout_alignLeft="@+id/phone_et"
+        android:layout_alignRight="@+id/phone_et"
+        android:layout_alignStart="@+id/phone_et"
+        android:layout_below="@+id/phone_et"
+        android:layout_marginTop="29dp">
+
+        <TextView
+            android:id="@+id/area_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="区域:"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/area_sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/area_tv"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/area_tv"/>
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/sign_up_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/phone_et"
+        android:layout_alignLeft="@+id/area_rl"
+        android:layout_alignRight="@+id/phone_et"
+        android:layout_alignStart="@+id/area_rl"
+        android:layout_below="@+id/area_rl"
         android:layout_marginTop="25dp"
         android:text="注册" />
 

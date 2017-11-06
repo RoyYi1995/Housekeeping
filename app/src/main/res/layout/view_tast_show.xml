@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp">
+
+    <TextView
+        android:id="@+id/task_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="17dp"
+        android:text="家政服务"
+        android:textAppearance="@style/TextAppearance.AppCompat" />
+
+    <TextView
+        android:id="@+id/task_info_tv"
+        android:layout_width="270dp"
+        android:layout_height="50dp"
+        android:text="每天做家务，打扫卫生"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/task_name_tv"
+        android:layout_alignStart="@+id/task_name_tv" />
+
+    <TextView
+        android:id="@+id/task_money_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="11dp"
+        android:text="￥200"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_alignBaseline="@+id/task_name_tv"
+        android:layout_alignBottom="@+id/task_name_tv"
+        android:layout_toRightOf="@+id/task_info_tv"
+        android:layout_toEndOf="@+id/task_info_tv"
+        android:layout_marginStart="11dp" />
+
+    <TextView
+        android:id="@+id/task_state_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/task_money_tv"
+        android:layout_alignStart="@+id/task_money_tv"
+        android:layout_alignTop="@+id/task_info_tv"
+        android:text="未完成"
+        android:textStyle="bold" />
+</RelativeLayout>

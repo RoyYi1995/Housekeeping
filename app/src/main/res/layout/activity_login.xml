@@ -16,11 +16,11 @@
         android:hint="电话号码"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="131dp"
-        android:layout_marginLeft="42dp"
+        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.361" />
+        app:layout_constraintHorizontal_bias="0.503" />
 
     <EditText
         android:id="@+id/password_et"
