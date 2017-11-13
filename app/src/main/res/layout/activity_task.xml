@@ -18,7 +18,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/task_name_tv"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
@@ -27,6 +26,7 @@
                 android:textSize="20sp" />
 
             <EditText
+                android:id="@+id/task_name_et"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -43,11 +43,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/task_time_tv"
                 style="@style/task_name_tv"
                 android:text="发布日期：" />
 
             <EditText
+                android:id="@+id/task_time_et"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
@@ -61,11 +61,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/task_info_tv"
                 style="@style/task_name_tv"
                 android:text="任务说明：" />
 
             <EditText
+                android:id="@+id/task_info_et"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
@@ -78,11 +78,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/task_money_tv"
                 style="@style/task_name_tv"
                 android:text="任务酬劳：" />
 
             <EditText
+                android:id="@+id/task_money_et"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
@@ -95,11 +95,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/task_people_tv"
                 style="@style/task_name_tv"
                 android:text="任务联系人：" />
 
             <EditText
+                android:id="@+id/task_people_et"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
@@ -112,15 +112,15 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/task_people_phone_tv"
                 style="@style/task_name_tv"
                 android:text="任务联系方式：" />
 
             <EditText
+                android:id="@+id/task_people_phone_et"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text="¥200" />
+                android:text="123123123" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -129,7 +129,23 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/task_get_people_tv"
+                style="@style/task_name_tv"
+                android:text="领取状态：" />
+
+            <EditText
+                android:id="@+id/task_state_name_et"
+                style="@style/task_value_et"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="未领取" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <TextView
                 style="@style/task_name_tv"
                 android:text="领取人：" />
 
@@ -140,11 +156,25 @@
                 android:text="王宇飞" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/focuce_ll"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:orientation="horizontal"
             android:background="#999">
         </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+            <Button
+                android:id="@+id/add_task_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"
+                android:text="添加"/>
+        </RelativeLayout>
 
     </LinearLayout>
 </ScrollView>

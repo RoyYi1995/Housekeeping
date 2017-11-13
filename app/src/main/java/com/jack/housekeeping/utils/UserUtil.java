@@ -9,6 +9,18 @@ package com.jack.housekeeping.utils;
 
 public class UserUtil {
     private static Object user;
+    public static int CUSTOM_TYPE = 0;
+    public static int EMPLOYEE = 1;
+
+    private static int type;
+
+    public static void setCustomType(int type){
+        UserUtil.type = type;
+    }
+
+    public static int getCurrentUserType(){
+        return UserUtil.type;
+    }
 
     public static void setUser(Object user){
         UserUtil.user = user;
@@ -16,4 +28,6 @@ public class UserUtil {
     public static Object getCurrentUser(){
         return user;
     }
+
+
 }

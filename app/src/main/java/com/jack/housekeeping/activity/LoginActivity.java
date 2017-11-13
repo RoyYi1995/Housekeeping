@@ -24,7 +24,8 @@ import okhttp3.ResponseBody;
 import rx.Subscriber;
 
 public class LoginActivity extends AppCompatActivity {
-    private final String LOGIN_URL = "/customer/login";
+    private final String CUSTOMER_LOGIN_URL = "/customer/login";
+    private final String EMPLOYEE_LOGIN_URL = "/employee/login";
     @BindView(R.id.phone_et)
     EditText phoneEt;
     @BindView(R.id.password_et)
@@ -72,10 +73,57 @@ public class LoginActivity extends AppCompatActivity {
     private void doLogin() {
         String userName = phoneEt.getText().toString();
         String password = passwordEt.getText().toString();
+        if (customerRb.isChecked()){
+            customLogin(userName,password);
+        }else{
+            employeeLogin(userName,password);
+        }
+
+    }
+
+    /**
+     * 员工登录
+     * @param userName
+     * @param password
+     */
+    private void employeeLogin(String userName, String password) {
+        Map<String, String> map = new HashMap<>();
+        map.put("employee_id", userName);
+        map.put("employee_password", password);
+        HttpRequestServer.create(this).doGetWithParams(EMPLOYEE_LOGIN_URL, map, new Subscriber<ResponseBody>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                if (ResponseUtil.verify(responseBody,true)) {
+                    // TODO: 2017/11/13 需要修改 
+                    Custom user = (Custom) ResponseUtil.getByType(Custom.class);
+                    UserUtil.setCustomType(UserUtil.CUSTOM_TYPE);
+                    UserUtil.setUser(user);
+                    startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                }
+            }
+        });
+    }
+
+    /**
+     * 客户登录
+     * @param userName
+     * @param password
+     */
+    private void customLogin(String userName, String password) {
         Map<String, String> map = new HashMap<>();
         map.put("username", userName);
         map.put("password", password);
-        HttpRequestServer.create(this).doGetWithParams(LOGIN_URL, map, new Subscriber<ResponseBody>() {
+        HttpRequestServer.create(this).doGetWithParams(CUSTOMER_LOGIN_URL, map, new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
             }
@@ -89,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onNext(ResponseBody responseBody) {
                 if (ResponseUtil.verify(responseBody,true)) {
                     Custom user = (Custom) ResponseUtil.getByType(Custom.class);
+                    UserUtil.setCustomType(UserUtil.CUSTOM_TYPE);
                     UserUtil.setUser(user);
                     startActivity(new Intent(LoginActivity.this,MainActivity.class));
                 }

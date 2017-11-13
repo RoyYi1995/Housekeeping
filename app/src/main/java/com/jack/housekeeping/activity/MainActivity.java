@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView taskRv;
 
     private final String MYTASK_URL = "/customer/myTask";
+    private final int ADD_TASK_CODE = 101;
     private ArrayList<Task> tasks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 // TODO: 2017/11/6 跳转到任务详情页面
-                Intent intent = new Intent();
+                Intent intent = new Intent(MainActivity.this,TaskActivity.class);
                 intent.putExtra("task",tasks.get(position));
                 startActivity(intent);
             }
@@ -118,9 +119,16 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                startActivity(new Intent());
+                startActivityForResult(new Intent(MainActivity.this,TaskActivity.class),ADD_TASK_CODE);
             }
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_TASK_CODE){
+            initData();
+        }
+    }
 }
