@@ -48,6 +48,8 @@ public class TaskActivity extends AppCompatActivity {
     LinearLayout focuceLl;
     @BindView(R.id.add_task_btn)
     Button addTaskBtn;
+    @BindView(R.id.get_task_btn)
+    Button getTaskBtn;
     private Task task;
 
     @Override
@@ -58,10 +60,25 @@ public class TaskActivity extends AppCompatActivity {
         task = (Task) getIntent().getSerializableExtra("task");
         if (task != null) {
             setData();
+            if (task.getTask_state() == 0&&UserUtil.getCurrentUserType() == UserUtil.EMPLOYEE_TYPE){
+                getTaskBtn.setVisibility(View.VISIBLE);
+                getTaskBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getTask();                    }
+                });
+            }
         } else {
             setButton();
         }
         initMenu();
+    }
+
+    /**
+     * 领取任务
+     */
+    private void getTask() {
+
     }
 
     private void setButton() {

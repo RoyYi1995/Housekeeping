@@ -9,6 +9,7 @@ import android.widget.RadioButton;
 
 import com.jack.housekeeping.R;
 import com.jack.housekeeping.bean.Custom;
+import com.jack.housekeeping.bean.Employee;
 import com.jack.housekeeping.presenter.HttpRequestServer;
 import com.jack.housekeeping.utils.ResponseUtil;
 import com.jack.housekeeping.utils.UserUtil;
@@ -105,8 +106,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onNext(ResponseBody responseBody) {
                 if (ResponseUtil.verify(responseBody,true)) {
                     // TODO: 2017/11/13 需要修改 
-                    Custom user = (Custom) ResponseUtil.getByType(Custom.class);
-                    UserUtil.setCustomType(UserUtil.CUSTOM_TYPE);
+                    Employee user = (Employee) ResponseUtil.getByType(Employee.class);
+                    UserUtil.setCustomType(UserUtil.EMPLOYEE_TYPE);
                     UserUtil.setUser(user);
                     startActivity(new Intent(LoginActivity.this,MainActivity.class));
                 }

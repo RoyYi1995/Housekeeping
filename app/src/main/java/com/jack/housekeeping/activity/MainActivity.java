@@ -12,6 +12,7 @@ import android.view.View;
 import com.google.gson.reflect.TypeToken;
 import com.jack.housekeeping.R;
 import com.jack.housekeeping.bean.Custom;
+import com.jack.housekeeping.bean.Employee;
 import com.jack.housekeeping.bean.Task;
 import com.jack.housekeeping.presenter.HttpRequestServer;
 import com.jack.housekeeping.utils.ResponseUtil;
@@ -35,24 +36,60 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView taskRv;
 
     private final String MYTASK_URL = "/customer/myTask";
+    private final String AREATASK_URL = "/employee/areaTask";
     private final int ADD_TASK_CODE = 101;
     private ArrayList<Task> tasks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        initData();
+        if (UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE) {
+            initCustomData();
+        } else {
+            initEmployeeData();
+        }
         initView();
     }
 
     /**
-     * 初始化数据
+     * 初始化员工数据
      */
-    private void initData() {
+    private void initEmployeeData() {
+        String employee_area_id = String.valueOf(((Employee) UserUtil.getCurrentUser()).getEmployee_area());
+        Map<String, String> map = new HashMap<>();
+        map.put("employee_area", employee_area_id);
+        HttpRequestServer.create(this).doGetWithParams(AREATASK_URL, map, new Subscriber<ResponseBody>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                if (ResponseUtil.verify(responseBody, true)) {
+                    tasks = (ArrayList<Task>) ResponseUtil.getByType(new TypeToken<ArrayList<Task>>() {
+                    }.getType());
+                    if (tasks == null) return;
+                    initRv();
+                }
+            }
+        });
+    }
+
+    /**
+     * 初始化客户数据
+     */
+    private void initCustomData() {
         String customer_id = String.valueOf(((Custom) UserUtil.getCurrentUser()).getCustomer_id());
-        Map<String,String> requestValues = new HashMap<>();
-        requestValues.put("customer_id",customer_id);
+        Map<String, String> requestValues = new HashMap<>();
+        requestValues.put("customer_id", customer_id);
         HttpRequestServer.create(this).doGetWithParams(MYTASK_URL, requestValues, new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
@@ -66,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseBody responseBody) {
-                if (ResponseUtil.verify(responseBody,true)){
-                    tasks = (ArrayList<Task>) ResponseUtil.getByType(new TypeToken<ArrayList<Task>>(){
+                if (ResponseUtil.verify(responseBody, true)) {
+                    tasks = (ArrayList<Task>) ResponseUtil.getByType(new TypeToken<ArrayList<Task>>() {
                     }.getType());
                     if (tasks == null) return;
                     initRv();
@@ -81,21 +118,20 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initRv() {
         taskRv.setLayoutManager(new LinearLayoutManager(this));
-        CommonAdapter<Task> taskCommonAdapter = new CommonAdapter<Task>(this,R.layout.view_tast_show,tasks) {
+        CommonAdapter<Task> taskCommonAdapter = new CommonAdapter<Task>(this, R.layout.view_tast_show, tasks) {
             @Override
             protected void convert(ViewHolder holder, Task task, int position) {
-                holder.setText(R.id.task_name_tv,task.getTask_name());
-                holder.setText(R.id.task_info_tv,task.getTask_info());
-                holder.setText(R.id.task_money_tv,"￥"+task.getTask_money());
-                holder.setText(R.id.task_state_name_tv,task.getTask_state_name());
+                holder.setText(R.id.task_name_tv, task.getTask_name());
+                holder.setText(R.id.task_info_tv, task.getTask_info());
+                holder.setText(R.id.task_money_tv, "￥" + task.getTask_money());
+                holder.setText(R.id.task_state_name_tv, task.getTask_state_name());
             }
         };
         taskCommonAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                // TODO: 2017/11/6 跳转到任务详情页面
-                Intent intent = new Intent(MainActivity.this,TaskActivity.class);
-                intent.putExtra("task",tasks.get(position));
+                Intent intent = new Intent(MainActivity.this, TaskActivity.class);
+                intent.putExtra("task", tasks.get(position));
                 startActivity(intent);
             }
 
@@ -108,18 +144,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *  初始化视图
+     * 初始化视图
      */
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
-        toolbar.setSubtitle(((Custom) UserUtil.getCurrentUser()).getCustomer_name());
+        if (UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE)
+            toolbar.setSubtitle(((Custom) UserUtil.getCurrentUser()).getCustomer_name());
+        else
+            toolbar.setSubtitle(((Employee) UserUtil.getCurrentUser()).getEmployee_name());
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(MainActivity.this,TaskActivity.class),ADD_TASK_CODE);
+                startActivityForResult(new Intent(MainActivity.this, TaskActivity.class), ADD_TASK_CODE);
             }
         });
     }
@@ -127,8 +166,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_TASK_CODE){
-            initData();
+        if (requestCode == ADD_TASK_CODE) {
+            if (UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE)
+                initCustomData();
+            else
+                initEmployeeData();
         }
     }
 }

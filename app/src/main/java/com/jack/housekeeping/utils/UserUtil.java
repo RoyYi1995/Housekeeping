@@ -10,7 +10,7 @@ package com.jack.housekeeping.utils;
 public class UserUtil {
     private static Object user;
     public static int CUSTOM_TYPE = 0;
-    public static int EMPLOYEE = 1;
+    public static int EMPLOYEE_TYPE = 1;
 
     private static int type;
 
