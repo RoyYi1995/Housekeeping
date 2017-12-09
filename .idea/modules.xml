@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Housekeeping.iml" filepath="$PROJECT_DIR$/Housekeeping.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Housekeeping.iml" filepath="$PROJECT_DIR$/.idea/Housekeeping.iml" />
+      <module fileurl="file://D:\AndroidProject\Housekeeping\Housekeeping.iml" filepath="D:\AndroidProject\Housekeeping\Housekeeping.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\AndroidProject\Housekeeping\app\app.iml" filepath="D:\AndroidProject\Housekeeping\app\app.iml" />
     </modules>
   </component>
 </project>

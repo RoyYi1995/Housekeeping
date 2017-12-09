@@ -7,7 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.jack.housekeeping.R;
@@ -149,18 +153,23 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
-        if (UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE)
+        if (UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE){
             toolbar.setSubtitle(((Custom) UserUtil.getCurrentUser()).getCustomer_name());
-        else
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivityForResult(new Intent(MainActivity.this, TaskActivity.class), ADD_TASK_CODE);
+                }
+            });
+            fab.setVisibility(View.VISIBLE);
+        }
+        else{
             toolbar.setSubtitle(((Employee) UserUtil.getCurrentUser()).getEmployee_name());
+            toolbar.setLogo(getResources().getDrawable(R.drawable.my_task));
+        }
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivityForResult(new Intent(MainActivity.this, TaskActivity.class), ADD_TASK_CODE);
-            }
-        });
+
     }
 
     @Override

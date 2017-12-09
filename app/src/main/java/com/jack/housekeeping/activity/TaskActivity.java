@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.jack.housekeeping.R;
 import com.jack.housekeeping.bean.Custom;
+import com.jack.housekeeping.bean.Employee;
 import com.jack.housekeeping.bean.Task;
 import com.jack.housekeeping.presenter.HttpRequestServer;
 import com.jack.housekeeping.utils.ResponseUtil;
@@ -29,6 +30,7 @@ import rx.Subscriber;
 public class TaskActivity extends AppCompatActivity {
 
     private final String ADD_TASK_URL = "/customer/addTask";
+    private final String GET_TASK_URL = "/employee/employeeToTask";
 
     @BindView(R.id.task_name_et)
     EditText taskNameEt;
@@ -78,7 +80,28 @@ public class TaskActivity extends AppCompatActivity {
      * 领取任务
      */
     private void getTask() {
+        Map<String,String> map = new HashMap<>();
+        map.put("task_id",task.getTask_id()+"");
+        map.put("employee_id",String.valueOf(((Employee)UserUtil.getCurrentUser()).getEmployee_id()));
+        HttpRequestServer.create(this).doGetWithParams(GET_TASK_URL, map, new Subscriber<ResponseBody>() {
+            @Override
+            public void onCompleted() {
 
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                if (ResponseUtil.verify(responseBody,false)){
+                    ToastUtil.getInstance().log("领取成功");
+                    finish();
+                }
+            }
+        });
     }
 
     private void setButton() {
