@@ -140,6 +140,7 @@
                 android:text="未领取" />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/employee_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -149,11 +150,12 @@
                 style="@style/task_name_tv"
                 android:text="领取人：" />
 
-            <EditText
+            <TextView
+                android:id="@+id/employee_tv"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text="王宇飞" />
+                android:text="" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/focuce_ll"

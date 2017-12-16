@@ -110,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                     UserUtil.setCustomType(UserUtil.EMPLOYEE_TYPE);
                     UserUtil.setUser(user);
                     startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    finish();
                 }
             }
         });
@@ -141,6 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                     UserUtil.setCustomType(UserUtil.CUSTOM_TYPE);
                     UserUtil.setUser(user);
                     startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                    finish();
                 }
             }
         });

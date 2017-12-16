@@ -43,7 +43,7 @@ public class ResponseUtil {
             }else {
                 if (haveMsg){
                     message = jsonObject.getString("data");
-                    KLog.i(message);
+                    KLog.json(message);
                 }
             }
 
