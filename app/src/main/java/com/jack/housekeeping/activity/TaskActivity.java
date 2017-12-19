@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,9 +41,10 @@ public class TaskActivity extends AppCompatActivity {
     private final String DONE_TASK_URL = "/employee/complateTask";
     private final String EVA_TASK_URL = "/customer//addTaskEVA";
     private final String GET_TASK_OTHER_URL = "/customer/myTaskInfo";
-    public  final int NOTACCEPTED = 1;
-    public  final int ACCEPTED = 2;
-    public  final int COMPLETED = 3;
+    private final String GET_EVA_URL = "/employee/myTaskEVA";
+    public final int NOTACCEPTED = 1;
+    public final int ACCEPTED = 2;
+    public final int COMPLETED = 3;
     @BindView(R.id.task_name_et)
     EditText taskNameEt;
     @BindView(R.id.task_time_et)
@@ -67,6 +69,8 @@ public class TaskActivity extends AppCompatActivity {
     TextView employeeTv;
     @BindView(R.id.employee_ll)
     LinearLayout employeeLl;
+    @BindView(R.id.eva_rv)
+    RecyclerView evaRv;
     private Task task;
     private TaskOtherInfo otherInfo;
     private ArrayList<String> evas;
@@ -88,10 +92,10 @@ public class TaskActivity extends AppCompatActivity {
         KLog.i(task.getTask_state());
         if (task != null) {
             setData();
-            if (task.getTask_state() == COMPLETED){
-
+            if (task.getTask_state() == COMPLETED && UserUtil.getCurrentUserType() == UserUtil.EMPLOYEE_TYPE) {
+                getEvaData();
             }
-            if (task.getTask_state() != NOTACCEPTED && UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE){
+            if (task.getTask_state() != NOTACCEPTED && UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE) {
                 KLog.i("任务已接收，用户");
                 setOtherInfo();
             }
@@ -153,12 +157,12 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     /**
-     * 获取额外信息
+     * 获取评论列表
      */
-    private void setOtherInfo() {
-        Map<String,String> map = new HashMap<>();
-        map.put("task_id",task.getTask_id()+"");
-        HttpRequestServer.create(this).doGetWithParams(GET_TASK_OTHER_URL, map, new Subscriber<ResponseBody>() {
+    private void getEvaData() {
+        Map<String, String> map = new HashMap<>();
+        map.put("task_id", task.getTask_id() + "");
+        HttpRequestServer.create(this).doGetWithParams(GET_EVA_URL, map, new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
 
@@ -172,6 +176,32 @@ public class TaskActivity extends AppCompatActivity {
             @Override
             public void onNext(ResponseBody responseBody) {
                 if (ResponseUtil.verify(responseBody,true)){
+
+                }
+            }
+        });
+    }
+
+    /**
+     * 获取额外信息
+     */
+    private void setOtherInfo() {
+        Map<String, String> map = new HashMap<>();
+        map.put("task_id", task.getTask_id() + "");
+        HttpRequestServer.create(this).doGetWithParams(GET_TASK_OTHER_URL, map, new Subscriber<ResponseBody>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                if (ResponseUtil.verify(responseBody, true)) {
                     otherInfo = (TaskOtherInfo) ResponseUtil.getByType(TaskOtherInfo.class);
                     otherInfo.setTask(task);
                     setOtherView();

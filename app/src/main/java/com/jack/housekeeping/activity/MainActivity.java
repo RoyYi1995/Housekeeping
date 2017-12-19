@@ -22,6 +22,7 @@ import com.jack.housekeeping.bean.Task;
 import com.jack.housekeeping.presenter.HttpRequestServer;
 import com.jack.housekeeping.utils.ResponseUtil;
 import com.jack.housekeeping.utils.UserUtil;
+import com.socks.library.KLog;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.MultiItemTypeAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initEmployeeData() {
         String employee_area_id = String.valueOf(((Employee) UserUtil.getCurrentUser()).getEmployee_area());
+        KLog.i("客户id：" + employee_area_id);
         Map<String, String> map = new HashMap<>();
         map.put("employee_area", employee_area_id);
         HttpRequestServer.create(this).doGetWithParams(AREATASK_URL, map, new Subscriber<ResponseBody>() {
@@ -142,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, TaskActivity.class);
                 intent.putExtra("task", tasks.get(position));
                 taskPosition = position;
-                startActivityForResult(intent,GET_TASK_CODE);
+                startActivityForResult(intent, GET_TASK_CODE);
             }
 
             @Override
@@ -160,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         FloatingActionButton fab = findViewById(R.id.fab);
-        if (UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE){
+        if (UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE) {
             toolbar.setSubtitle(((Custom) UserUtil.getCurrentUser()).getCustomer_name());
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -169,8 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             fab.setBackgroundDrawable(getResources().getDrawable(R.drawable.add));
-        }
-        else{
+        } else {
             toolbar.setSubtitle(((Employee) UserUtil.getCurrentUser()).getEmployee_name());
             fab.setBackgroundDrawable(getResources().getDrawable(R.drawable.my_task));
             fab.setOnClickListener(new View.OnClickListener() {
@@ -186,11 +187,12 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 获取员工已经接收的任务
+     *
      * @param employee_id
      */
     private void getEmployeeTask(String employee_id) {
-        Map<String,String> map = new HashMap<>();
-        map.put("employee_id",employee_id);
+        Map<String, String> map = new HashMap<>();
+        map.put("employee_id", employee_id);
         HttpRequestServer.create(this).doGetWithParams(EMPLOYEE_TASK_URL, map, new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
@@ -218,19 +220,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_TASK_CODE) {
-            if (UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE)
-                initCustomData();
-            else
-                initEmployeeData();
-        }else if(requestCode == GET_TASK_CODE){
+        if (UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE)
             initCustomData();
-        }
+        else
+            initEmployeeData();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.BUTTON_BACK){
+        if (event.getAction() == MotionEvent.BUTTON_BACK) {
 
         }
         return super.onTouchEvent(event);
