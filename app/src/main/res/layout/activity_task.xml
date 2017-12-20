@@ -30,7 +30,7 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:text="家政活动"
+                android:hint="点击此处输入"
                 android:textColor="#333"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -50,8 +50,7 @@
                 android:id="@+id/task_time_et"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="家政活动" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
@@ -68,8 +67,7 @@
                 android:id="@+id/task_info_et"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="家政活动" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -85,8 +83,7 @@
                 android:id="@+id/task_money_et"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="¥200" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -102,8 +99,7 @@
                 android:id="@+id/task_people_et"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="张三" />
+                android:layout_height="wrap_content"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -119,8 +115,7 @@
                 android:id="@+id/task_people_phone_et"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="123123123" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -136,8 +131,7 @@
                 android:id="@+id/task_state_name_et"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="未领取" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/employee_ll"
@@ -154,8 +148,18 @@
                 android:id="@+id/employee_tv"
                 style="@style/task_value_et"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="" />
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/eva_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <TextView
+                style="@style/task_name_tv"
+                android:text="评论列表：" />
         </LinearLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/eva_rv"

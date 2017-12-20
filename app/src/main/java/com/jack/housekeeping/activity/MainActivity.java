@@ -1,18 +1,18 @@
 package com.jack.housekeeping.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.jack.housekeeping.R;
@@ -21,6 +21,7 @@ import com.jack.housekeeping.bean.Employee;
 import com.jack.housekeeping.bean.Task;
 import com.jack.housekeeping.presenter.HttpRequestServer;
 import com.jack.housekeeping.utils.ResponseUtil;
+import com.jack.housekeeping.utils.ToastUtil;
 import com.jack.housekeeping.utils.UserUtil;
 import com.socks.library.KLog;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -33,7 +34,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.Request;
 import okhttp3.ResponseBody;
 import rx.Subscriber;
 
@@ -41,14 +41,25 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.task_rv)
     RecyclerView taskRv;
-
+    @BindView(R.id.null_rl)
+    RelativeLayout nullRl;
     private final String MYTASK_URL = "/customer/myTask";
     private final String AREATASK_URL = "/employee/areaTask";
-    private final String EMPLOYEE_TASK_URL = "/employee/myAreaTask";
+
     private final int ADD_TASK_CODE = 101;
     private final int GET_TASK_CODE = 102;
+
     private ArrayList<Task> tasks;
-    private int taskPosition = 0;
+    private boolean isExit = false;
+
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            isExit = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +140,10 @@ public class MainActivity extends AppCompatActivity {
      */
     private void initRv() {
         taskRv.setLayoutManager(new LinearLayoutManager(this));
+        if (tasks == null || tasks.size() == 0) {
+            nullRl.setVisibility(View.VISIBLE);
+            return;
+        }
         CommonAdapter<Task> taskCommonAdapter = new CommonAdapter<Task>(this, R.layout.view_tast_show, tasks) {
             @Override
             protected void convert(ViewHolder holder, Task task, int position) {
@@ -143,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(MainActivity.this, TaskActivity.class);
                 intent.putExtra("task", tasks.get(position));
-                taskPosition = position;
                 startActivityForResult(intent, GET_TASK_CODE);
             }
 
@@ -170,50 +184,19 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(new Intent(MainActivity.this, TaskActivity.class), ADD_TASK_CODE);
                 }
             });
-            fab.setBackgroundDrawable(getResources().getDrawable(R.drawable.add));
+            fab.setBackgroundResource(R.drawable.add);
         } else {
             toolbar.setSubtitle(((Employee) UserUtil.getCurrentUser()).getEmployee_name());
-            fab.setBackgroundDrawable(getResources().getDrawable(R.drawable.my_task));
+            fab.setBackgroundResource(R.drawable.my_task);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    getEmployeeTask(((Employee) UserUtil.getCurrentUser()).getEmployee_id());
+                    startActivity(new Intent(MainActivity.this, EmploeeTaskActivity.class));
                 }
             });
         }
         setSupportActionBar(toolbar);
 
-    }
-
-    /**
-     * 获取员工已经接收的任务
-     *
-     * @param employee_id
-     */
-    private void getEmployeeTask(String employee_id) {
-        Map<String, String> map = new HashMap<>();
-        map.put("employee_id", employee_id);
-        HttpRequestServer.create(this).doGetWithParams(EMPLOYEE_TASK_URL, map, new Subscriber<ResponseBody>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(ResponseBody responseBody) {
-                if (ResponseUtil.verify(responseBody, true)) {
-                    tasks = (ArrayList<Task>) ResponseUtil.getByType(new TypeToken<ArrayList<Task>>() {
-                    }.getType());
-                    if (tasks == null) return;
-                    initRv();
-                }
-            }
-        });
     }
 
 
@@ -226,11 +209,35 @@ public class MainActivity extends AppCompatActivity {
             initEmployeeData();
     }
 
+    /**
+     * 监听返回键
+     *
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.BUTTON_BACK) {
-
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return false;
         }
-        return super.onTouchEvent(event);
+        return super.onKeyDown(keyCode, event);
     }
+
+    /*
+   *   BACK键退出
+   * */
+    private void exit() {
+        if (!isExit) {
+            isExit = true;
+            ToastUtil.getInstance().log("再次点击返回键退出");
+            Message message = Message.obtain();
+            message.what = 4;
+            mHandler.sendMessageDelayed(message, 2000);
+        } else {
+            finish();
+        }
+    }
+
 }

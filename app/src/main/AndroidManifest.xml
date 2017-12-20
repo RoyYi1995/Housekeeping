@@ -24,7 +24,8 @@
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.TaskActivity"></activity>
+        <activity android:name=".activity.TaskActivity" />
+        <activity android:name=".activity.EmploeeTaskActivity"></activity>
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,10 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
+import com.google.gson.reflect.TypeToken;
 import com.jack.housekeeping.R;
 import com.jack.housekeeping.bean.Custom;
 import com.jack.housekeeping.bean.Employee;
+import com.jack.housekeeping.bean.Eva;
 import com.jack.housekeeping.bean.Task;
 import com.jack.housekeeping.bean.TaskOtherInfo;
 import com.jack.housekeeping.presenter.HttpRequestServer;
@@ -24,6 +28,8 @@ import com.jack.housekeeping.utils.ResponseUtil;
 import com.jack.housekeeping.utils.ToastUtil;
 import com.jack.housekeeping.utils.UserUtil;
 import com.socks.library.KLog;
+import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,9 +77,11 @@ public class TaskActivity extends AppCompatActivity {
     LinearLayout employeeLl;
     @BindView(R.id.eva_rv)
     RecyclerView evaRv;
+    @BindView(R.id.eva_ll)
+    LinearLayout evaLl;
     private Task task;
     private TaskOtherInfo otherInfo;
-    private ArrayList<String> evas;
+    private ArrayList<Eva> evas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,15 +96,14 @@ public class TaskActivity extends AppCompatActivity {
      * 初始化视图
      */
     private void initview() {
+        getSupportActionBar().setTitle("任务详情");
         task = (Task) getIntent().getSerializableExtra("task");
-        KLog.i(task.getTask_state());
         if (task != null) {
             setData();
             if (task.getTask_state() == COMPLETED && UserUtil.getCurrentUserType() == UserUtil.EMPLOYEE_TYPE) {
                 getEvaData();
             }
             if (task.getTask_state() != NOTACCEPTED && UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE) {
-                KLog.i("任务已接收，用户");
                 setOtherInfo();
             }
             if (task.getTask_state() == NOTACCEPTED && UserUtil.getCurrentUserType() == UserUtil.EMPLOYEE_TYPE) {
@@ -175,11 +182,31 @@ public class TaskActivity extends AppCompatActivity {
 
             @Override
             public void onNext(ResponseBody responseBody) {
-                if (ResponseUtil.verify(responseBody,true)){
-
+                if (ResponseUtil.verify(responseBody, true)) {
+                    evas = (ArrayList<Eva>) ResponseUtil.getByType(new TypeToken<ArrayList<Eva>>() {
+                    }.getType());
+                    setEvaView();
                 }
             }
         });
+    }
+
+    /**
+     * 设置评论列表
+     */
+    private void setEvaView() {
+        evaRv.setLayoutManager(new LinearLayoutManager(this));
+        CommonAdapter<Eva> evaCommonAdapter = new CommonAdapter<Eva>(this, R.layout.view_eva, evas) {
+            @Override
+            protected void convert(ViewHolder holder, Eva eva, int position) {
+                holder.setText(R.id.eva_name_tv, task.getTask_people());
+                holder.setText(R.id.eva_info_tv, eva.getEvaluation_info());
+                holder.setText(R.id.eva_time_tv, eva.getEvaluation_time());
+            }
+        };
+        evaRv.setAdapter(evaCommonAdapter);
+        evaLl.setVisibility(View.VISIBLE);
+        evaRv.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -306,6 +333,7 @@ public class TaskActivity extends AppCompatActivity {
     }
 
     private void setButton() {
+        getSupportActionBar().setTitle("添加任务");
         addTaskBtn.setVisibility(View.VISIBLE);
         addTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
