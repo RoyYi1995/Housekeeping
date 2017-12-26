@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -45,7 +46,7 @@ public class TaskActivity extends AppCompatActivity {
     private final String ADD_TASK_URL = "/customer/addTask";
     private final String GET_TASK_URL = "/employee/employeeToTask";
     private final String DONE_TASK_URL = "/employee/complateTask";
-    private final String EVA_TASK_URL = "/customer//addTaskEVA";
+    private final String EVA_TASK_URL = "/customer/addTaskEVA";
     private final String GET_TASK_OTHER_URL = "/customer/myTaskInfo";
     private final String GET_EVA_URL = "/employee/myTaskEVA";
     public final int NOTACCEPTED = 1;
@@ -100,7 +101,7 @@ public class TaskActivity extends AppCompatActivity {
         task = (Task) getIntent().getSerializableExtra("task");
         if (task != null) {
             setData();
-            if (task.getTask_state() == COMPLETED && UserUtil.getCurrentUserType() == UserUtil.EMPLOYEE_TYPE) {
+            if (task.getTask_state() == COMPLETED) {
                 getEvaData();
             }
             if (task.getTask_state() != NOTACCEPTED && UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE) {
@@ -136,25 +137,28 @@ public class TaskActivity extends AppCompatActivity {
             } else if (task.getTask_state() == COMPLETED && UserUtil.getCurrentUserType() == UserUtil.CUSTOM_TYPE) {
                 getTaskBtn.setText("评价任务");
                 getTaskBtn.setVisibility(View.VISIBLE);
-                final LinearLayout layout = new LinearLayout(this);
+                final RelativeLayout layout = new RelativeLayout(this);
                 final EditText text = new EditText(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(400, 100);
+                params.addRule(RelativeLayout.CENTER_HORIZONTAL,1);
                 text.setLayoutParams(params);
                 layout.addView(text);
+                final AlertDialog dialog = new AlertDialog.Builder(this)
+                        .setTitle("提示")
+                        .setView(layout)
+                        .setNegativeButton("取消", null)
+                        .setPositiveButton("评价", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                evaTask(text.getText().toString());
+                            }
+                        })
+                        .create();
                 getTaskBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        new AlertDialog.Builder(TaskActivity.this)
-                                .setTitle("提示")
-                                .setView(layout)
-                                .setNegativeButton("取消", null)
-                                .setPositiveButton("评价", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        evaTask(text.getText().toString());
-                                    }
-                                })
-                                .create().show();
+                        text.setText("");
+                        dialog.show();
                     }
                 });
             }
@@ -256,7 +260,7 @@ public class TaskActivity extends AppCompatActivity {
         map.put("customer_id", task.getTask_customer());
         map.put("employee_id", otherInfo.getEmployee_id());
         map.put("evaluation_info", text);
-        HttpRequestServer.create(this).doGetWithParams(ADD_TASK_URL, map, new Subscriber<ResponseBody>() {
+        HttpRequestServer.create(this).doGetWithParams(EVA_TASK_URL, map, new Subscriber<ResponseBody>() {
             @Override
             public void onCompleted() {
 
@@ -271,7 +275,7 @@ public class TaskActivity extends AppCompatActivity {
             public void onNext(ResponseBody responseBody) {
                 if (ResponseUtil.verify(responseBody, false)) {
                     ToastUtil.getInstance().log("添加评价成功");
-                    finish();
+                    getEvaData();
                 }
             }
         });

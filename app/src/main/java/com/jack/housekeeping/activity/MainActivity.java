@@ -184,16 +184,16 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(new Intent(MainActivity.this, TaskActivity.class), ADD_TASK_CODE);
                 }
             });
-            fab.setBackgroundResource(R.drawable.add);
+            fab.setImageResource(R.drawable.add_task);
         } else {
             toolbar.setSubtitle(((Employee) UserUtil.getCurrentUser()).getEmployee_name());
-            fab.setBackgroundResource(R.drawable.my_task);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(MainActivity.this, EmploeeTaskActivity.class));
                 }
             });
+            fab.setImageResource(R.drawable.my_task);
         }
         setSupportActionBar(toolbar);
 

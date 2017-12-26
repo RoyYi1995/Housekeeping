@@ -86,7 +86,10 @@ public class EmploeeTaskActivity extends AppCompatActivity {
         employeeRl.setLayoutManager(new LinearLayoutManager(this));
         if (tasks == null || tasks.size() == 0){
             nullTaskRl.setVisibility(View.VISIBLE);
+            return;
         }
+        else
+            nullTaskRl.setVisibility(View.GONE);
         CommonAdapter<Task> taskCommonAdapter = new CommonAdapter<Task>(this, R.layout.view_tast_show, tasks) {
             @Override
             protected void convert(ViewHolder holder, Task task, int position) {

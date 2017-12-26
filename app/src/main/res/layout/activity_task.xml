@@ -200,5 +200,8 @@
                 android:visibility="gone"
                 android:text="领取"/>
         </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
     </LinearLayout>
 </ScrollView>
